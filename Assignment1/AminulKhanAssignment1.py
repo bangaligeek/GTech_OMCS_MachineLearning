@@ -5,6 +5,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn import svm
 import numpy as np
 import csv
+import matplotlib.pyplot as plt
+from sklearn import ensemble
 
 #*******************All Functions*****************
 def extract_target_ConvertStringNumber(InputData):
@@ -45,6 +47,8 @@ Predict_Data = Data[26614]
 clf_dt = tree.DecisionTreeClassifier()
 clf_dt = clf_dt.fit(Data, Target)
 
+print ("Training accuracy of DT", clf_dt.score(Data, Target))
+
 predict_target = clf_dt.predict(Predict_Data)
 
 print("This is the predicted value using decision tree", predict_target)
@@ -53,8 +57,17 @@ print()
 neigh = KNeighborsClassifier(n_neighbors=3)
 neigh.fit(Data, Target)
 
+print ("Training accuracy of DT", neigh.score(Data, Target))
+
 predict_target = neigh.predict(Predict_Data)
 print("This is the predicted value using KNN", predict_target)
+print()
+
+clf_boost = ensemble.AdaBoostClassifier()
+clf_boost = clf_boost.fit(Data, Data)
+
+predict_target = clf_boost.predict(Predict_Data)
+print("This is the predicted value using Boosting", predict_target)
 print()
 
 clf_svm = svm.SVC()
@@ -64,4 +77,5 @@ predict_target = clf_svm.predict(Predict_Data)
 
 print("This is the predicted value using SVM", predict_target)
 print()
+
 
