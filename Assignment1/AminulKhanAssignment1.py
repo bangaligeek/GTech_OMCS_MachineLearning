@@ -13,6 +13,12 @@ from sklearn.externals.six import StringIO
 from sklearn import cross_validation
 import pybrain #install using pip install -i https://pypi.binstar.org/pypi/simple pybrain
 from pybrain.datasets import ClassificationDataSet
+import copy
+from pybrain.datasets            import ClassificationDataSet
+from pybrain.utilities           import percentError
+from pybrain.tools.shortcuts     import buildNetwork
+from pybrain.supervised.trainers import BackpropTrainer
+from pybrain.structure.modules   import SoftmaxLayer
 
 #*******************All Functions*****************
 
@@ -64,16 +70,44 @@ print (DataTrain.shape, "Training data create\n")
 print (DataTest.shape, "Training data create\n")
 print()
 
+'''
 #prepare data for pybrain
 number_of_columns = Data.shape[1]
 PyBData = ClassificationDataSet(number_of_columns, 1, nb_classes=2)
 print(PyBData)
+assert(Data.shape[0] == Target.shape[0])
 PyBData.setField('input', Data)
 print(PyBData)
 print("target shape",Target.shape[0])
-PyBData.setField('target', Target)
-print("This is the target",PyBData['target'])
+PyBData.setField('output', Target)
+print(PyBData)
+'''
 
+#prepare data for pybrain
+number_of_columns = Data.shape[1]
+PyBData = ClassificationDataSet(number_of_columns, 1, nb_classes=2)
+PyBDataTrain = ClassificationDataSet(number_of_columns, 1, nb_classes=2)
+PyBDataTest = ClassificationDataSet(number_of_columns, 1, nb_classes=2)
+
+for i in xrange(len(Data)):
+	PyBData.appendLinked(Data[i], Target[i])
+	
+for i in xrange(len(DataTrain)):
+	PyBDataTrain.appendLinked(DataTrain[i], TargetTrain[i])
+	
+for i in xrange(len(DataTest)):
+	PyBDataTest.appendLinked(DataTest[i], TargetTest[i])
+
+print ("This is the input size in PyBData", len(PyBData['input']))
+print ("This is the target size in PyBData", len(PyBData['target']))
+print ("This is the input size in PyBDataTrain", len(PyBDataTrain['input']))
+print ("This is the target size in PyBDataTrain", len(PyBDataTrain['target']))
+print ("This is the input size in PyBDataTest", len(PyBDataTest['input']))
+print ("This is the target size in PyBDataTest", len(PyBDataTest['target']))
+print ("This is the Data", Data)
+print ("This is the Target", Target)
+print ("This is the input in PyData", PyBData['input'])
+print ("This is the target in PyData", PyBData['target'])
 
 #*******************End of Preparing Data & Target for Estimators******************
 #*******************Decision Tree Classification******************
@@ -85,6 +119,42 @@ print()
 print ("Training accuracy of DT", clf_dt.score(DataTrain, TargetTrain))
 print ("Testing accuracy of DT", clf_dt.score(DataTest, TargetTest))
 print()
+
+#*******************Neural Network Classification******************
+
+PyBDataTrain_nn = copy.deepcopy(PyBDataTrain)
+PyBDataTest_nn = copy.deepcopy(PyBDataTest)
+
+PyBDataTrain_nn._convertToOneOfMany()
+PyBDataTest_nn._convertToOneOfMany()
+
+fnn = buildNetwork(PyBDataTrain_nn.indim, 5, PyBDataTrain_nn.outdim, outclass=SoftmaxLayer)
+trainer = BackpropTrainer( fnn, dataset=PyBDataTrain_nn, momentum=0.1, verbose=True, weightdecay=0.01)
+
+epochs = 6
+trnerr = []
+tsterr = []
+for i in xrange(epochs):
+	# If you set the 'verbose' trainer flag, this will print the total error as it goes.
+	trainer.trainEpochs(3)
+	trnresult = percentError(trainer.testOnClassData(), PyBDataTrain_nn['class'])
+	tstresult = percentError(trainer.testOnClassData(dataset=PyBDataTest_nn), PyBDataTest_nn['class'])
+	#print "epoch: %4d" % trainer.totalepochs, " train error: %5.2f%%" % trnresult, " test error: %5.2f%%" % tstresult
+	trnerr.append(trnresult)
+	tsterr.append(tstresult)
+
+fig_nn = plt.figure()
+ax = fig_nn.add_subplot(1, 1, 1)
+ax.set_title("Neural Network Convergence")
+ax.set_xlabel('Epoch')
+ax.set_ylabel('Error')
+ax.semilogy(range(len(trnerr)), trnerr, 'b', range(len(tsterr)), tsterr, 'r')
+
+# Check the accuracy
+print "\n" + "*" * 50
+print "DEFAULT NEURAL NETWORK"
+print "Training Accuracy: " + str(1 - percentError(trainer.testOnClassData(), PyBDataTrain_nn['class'])/100.0)
+print "Testing Accuracy: " + str(1 - percentError(trainer.testOnClassData(dataset=PyBDataTest_nn), PyBDataTest_nn['class'])/100.0)
 
 #*******************K Nearest Neighbour Classification******************
 neigh = KNeighborsClassifier(n_neighbors=1)
