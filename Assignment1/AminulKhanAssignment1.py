@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from sklearn import ensemble
 from sklearn.cross_validation import train_test_split
 from sklearn.externals.six import StringIO 
-import pydot
+#import pydot
 from sklearn import cross_validation
 import pybrain #install using pip install -i https://pypi.binstar.org/pypi/simple pybrain
 from pybrain.datasets import ClassificationDataSet
