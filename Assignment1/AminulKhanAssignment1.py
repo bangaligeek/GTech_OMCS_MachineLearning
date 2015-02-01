@@ -40,6 +40,17 @@ def extract_target_ConvertStringNumber(InputData, numStringKeys, classKey):
 	
 	return (InputData, ExtractedTarget)
 
+
+def KFolds_CrossVal(data, target, learners, folds):
+    """
+    Compute a k-folds validation on a scikit-learn data set for several models
+    """
+    learner_score = []
+    for model in learners:
+        scores = cross_validation.cross_val_score(model, data, target, cv=folds)
+        learner_score.append(sum(scores) / len(scores))
+    return learner_score
+
 #*******************End of Functions**************
 #*******************Prepare Data & Target for Estimators******************
 InputData = list(csv.DictReader(open('income_data_withheader.txt', 'rU')))
@@ -123,11 +134,21 @@ print ("Training accuracy of DT", clf_dt.score(DataTrain, TargetTrain))
 print ("Testing accuracy of DT", clf_dt.score(DataTest, TargetTest))
 print()
 
+#Cross validation 
+learners = []
+learners.append(tree.DecisionTreeClassifier())
+learners.append(tree.DecisionTreeClassifier(criterion="entropy"))
+learners.append(tree.DecisionTreeClassifier(min_samples_split=20))
+learners.append(tree.DecisionTreeClassifier(min_samples_leaf=5))
+print("CV DT scores", KFolds_CrossVal(DataTrain, TargetTrain, learners, 5))
+
+'''
 dot_data = StringIO()
 tree.export_graphviz(clf_dt, out_file=dot_data)
 graph = pydot.graph_from_dot_data(dot_data.getvalue())
 print(graph)
 graph.write_pdf("scikit_tree.pdf")
+'''
 
 #*******************Neural Network Classification******************
 PyBDataTrain_nn = copy.deepcopy(PyBDataTrain)
@@ -147,7 +168,7 @@ for i in xrange(epochs):
 	trainer.trainEpochs(3)
 	trnresult = percentError(trainer.testOnClassData(), PyBDataTrain_nn['class'])
 	tstresult = percentError(trainer.testOnClassData(dataset=PyBDataTest_nn), PyBDataTest_nn['class'])
-	print "epoch: %4d" % trainer.totalepochs, " train error: %5.2f%%" % trnresult, " test error: %5.2f%%" % tstresult
+	print ("epoch: %4d" % trainer.totalepochs, " train error: %5.2f%%" % trnresult, " test error: %5.2f%%" % tstresult)
 	trnerr.append(trnresult)
 	tsterr.append(tstresult)
 
@@ -159,10 +180,10 @@ ax.set_ylabel('Error')
 ax.semilogy(range(len(trnerr)), trnerr, 'b', range(len(tsterr)), tsterr, 'r')
 
 # Check the accuracy
-print "\n" + "*" * 50
-print "DEFAULT NEURAL NETWORK"
-print "Training Accuracy: " + str(1 - percentError(trainer.testOnClassData(), PyBDataTrain_nn['class'])/100.0)
-print "Testing Accuracy: " + str(1 - percentError(trainer.testOnClassData(dataset=PyBDataTest_nn), PyBDataTest_nn['class'])/100.0)
+print ("\n" + "*" * 50)
+print ("DEFAULT NEURAL NETWORK")
+print ("Training Accuracy: " + str(1 - percentError(trainer.testOnClassData(), PyBDataTrain_nn['class'])/100.0))
+print ("Testing Accuracy: " + str(1 - percentError(trainer.testOnClassData(dataset=PyBDataTest_nn), PyBDataTest_nn['class'])/100.0))
 
 #*******************K Nearest Neighbour Classification******************
 neigh = KNeighborsClassifier(n_neighbors=1)
