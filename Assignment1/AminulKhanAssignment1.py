@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from sklearn import ensemble
 from sklearn.cross_validation import train_test_split
 from sklearn.externals.six import StringIO 
-#import pydot
+import pydot
 from sklearn import cross_validation
 import pybrain #install using pip install -i https://pypi.binstar.org/pypi/simple pybrain
 from pybrain.datasets import ClassificationDataSet
@@ -62,6 +62,9 @@ print("this is the target label encoded",len(Target))
 vec = DictVectorizer()
 Data = vec.fit_transform(FormatedRawData).toarray()
 
+# Normalize data
+Data = preprocessing.normalize(Data, norm='l2', axis=0)
+
 DataTrain, DataTest, TargetTrain, TargetTest = train_test_split(Data, Target, test_size=0.33, random_state=0)
 
 print()
@@ -112,7 +115,7 @@ print ("This is the target in PyData", PyBData['target'])
 #*******************End of Preparing Data & Target for Estimators******************
 #*******************Decision Tree Classification******************
 
-clf_dt = tree.DecisionTreeClassifier()
+clf_dt = tree.DecisionTreeClassifier(criterion="entropy")
 clf_dt = clf_dt.fit(DataTrain, TargetTrain)
 
 print()
@@ -120,8 +123,13 @@ print ("Training accuracy of DT", clf_dt.score(DataTrain, TargetTrain))
 print ("Testing accuracy of DT", clf_dt.score(DataTest, TargetTest))
 print()
 
-#*******************Neural Network Classification******************
+dot_data = StringIO()
+tree.export_graphviz(clf_dt, out_file=dot_data)
+graph = pydot.graph_from_dot_data(dot_data.getvalue())
+print(graph)
+graph.write_pdf("scikit_tree.pdf")
 
+#*******************Neural Network Classification******************
 PyBDataTrain_nn = copy.deepcopy(PyBDataTrain)
 PyBDataTest_nn = copy.deepcopy(PyBDataTest)
 
@@ -139,7 +147,7 @@ for i in xrange(epochs):
 	trainer.trainEpochs(3)
 	trnresult = percentError(trainer.testOnClassData(), PyBDataTrain_nn['class'])
 	tstresult = percentError(trainer.testOnClassData(dataset=PyBDataTest_nn), PyBDataTest_nn['class'])
-	#print "epoch: %4d" % trainer.totalepochs, " train error: %5.2f%%" % trnresult, " test error: %5.2f%%" % tstresult
+	print "epoch: %4d" % trainer.totalepochs, " train error: %5.2f%%" % trnresult, " test error: %5.2f%%" % tstresult
 	trnerr.append(trnresult)
 	tsterr.append(tstresult)
 
