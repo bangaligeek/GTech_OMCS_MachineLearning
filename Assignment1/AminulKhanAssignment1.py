@@ -55,7 +55,7 @@ def KFolds_CrossVal(data, target, learners, folds):
 
 def plot_validation_curve(estimator, X, y, param_name, param_range, addition_graph_points, graph_title, graph_xlabel, graph_ylabel, ylim):
 	
-	cv_train_scores, cv_test_scores = validation_curve(estimator, X, y, param_name=param_name, param_range=param_range, cv=3, scoring="accuracy")
+	cv_train_scores, cv_test_scores = validation_curve(estimator, X, y, param_name=param_name, param_range=param_range, cv=5, scoring="accuracy")
 
 	cv_train_scores_mean = np.mean(cv_train_scores, axis=1)
 	cv_train_scores_std = np.std(cv_train_scores, axis=1)
@@ -207,7 +207,7 @@ print ("Testing accuracy of KNN", neigh.score(DataTest, TargetTest))
 print()
 
 # create points for validation curve plotting of the accuracy score of full Training and Test data on varying values of min_sample_split
-n_neighbors = [1, 2, 3]
+n_neighbors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 p = [1,2]
 full_train_score = []
 unseen_test_scores = []
