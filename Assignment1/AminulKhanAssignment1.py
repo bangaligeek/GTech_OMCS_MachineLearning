@@ -55,7 +55,7 @@ def KFolds_CrossVal(data, target, learners, folds):
 
 def plot_validation_curve(estimator, X, y, param_name, param_range, addition_graph_points, graph_title, graph_xlabel, graph_ylabel, ylim):
 	
-	cv_train_scores, cv_test_scores = validation_curve(estimator, X, y, param_name=param_name, param_range=param_range, cv=5, scoring="accuracy")
+	cv_train_scores, cv_test_scores = validation_curve(estimator, X, y, param_name=param_name, param_range=param_range, cv=3, scoring="accuracy")
 
 	cv_train_scores_mean = np.mean(cv_train_scores, axis=1)
 	cv_train_scores_std = np.std(cv_train_scores, axis=1)
@@ -67,13 +67,13 @@ def plot_validation_curve(estimator, X, y, param_name, param_range, addition_gra
 	plt.ylabel(graph_ylabel)
 	plt.ylim(*ylim)
 
-	plt.fill_between(min_samples_split, cv_train_scores_mean - cv_train_scores_std, cv_train_scores_mean + cv_train_scores_std, alpha=0.1, color="r")
-	plt.fill_between(min_samples_split, cv_test_scores_mean - cv_test_scores_std,cv_test_scores_mean + cv_test_scores_std, alpha=0.1, color="b")
-	plt.plot(min_samples_split, cv_train_scores_mean, 'o-', color="r", label="Cross Validation Training score")
-	plt.plot(min_samples_split, cv_test_scores_mean, 'o-', color="b",label="Cross Validation Test Score")
+	plt.fill_between(param_range, cv_train_scores_mean - cv_train_scores_std, cv_train_scores_mean + cv_train_scores_std, alpha=0.1, color="r")
+	plt.fill_between(param_range, cv_test_scores_mean - cv_test_scores_std,cv_test_scores_mean + cv_test_scores_std, alpha=0.1, color="b")
+	plt.plot(param_range, cv_train_scores_mean, 'o-', color="r", label="Cross Validation Training score")
+	plt.plot(param_range, cv_test_scores_mean, 'o-', color="b",label="Cross Validation Test Score")
 	
 	for gp in addition_graph_points:
-		plt.plot(min_samples_split, gp['data'], 'o-', color=gp['color'],label=gp['label'])
+		plt.plot(param_range, gp['data'], 'o-', color=gp['color'],label=gp['label'])
 
 	plt.legend(loc="best")
 	plt.show()
@@ -207,7 +207,7 @@ print ("Testing accuracy of KNN", neigh.score(DataTest, TargetTest))
 print()
 
 # create points for validation curve plotting of the accuracy score of full Training and Test data on varying values of min_sample_split
-n_neighbors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+n_neighbors = [1, 2, 3, 4, 5]
 p = [1,2]
 full_train_score = []
 unseen_test_scores = []
