@@ -223,7 +223,13 @@ for d in p:
 	# Variable for plotting validation curve
 	addition_graph_points = [{'data':full_train_score, 'color':'y', 'label': 'Full Training Data Score'}, 
 		{'data':unseen_test_scores, 'color':'g', 'label': 'Full Training Data Score'}]
-	graph_title = "KNN Validation Curve"
+	if d==1:
+		graph_title = "KNN Validation Curve Using Manhattan Distance"
+	elif d==2:
+		graph_title = "KNN Validation Curve Using Eucidean Distance"
+	else:
+		graph_title = "KNN Validation Curve"
+	
 	graph_xlabel = "Number of Nearest Neighbours"
 	graph_ylabel = "Score"
 	ylim = (.7, 1.1)
