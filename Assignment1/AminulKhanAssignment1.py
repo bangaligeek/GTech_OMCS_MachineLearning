@@ -19,6 +19,8 @@ from pybrain.utilities           import percentError
 from pybrain.tools.shortcuts     import buildNetwork
 from pybrain.supervised.trainers import BackpropTrainer
 from pybrain.structure.modules   import SoftmaxLayer
+from sklearn.grid_search import GridSearchCV
+from sklearn.learning_curve import validation_curve
 
 #*******************All Functions*****************
 
@@ -45,11 +47,36 @@ def KFolds_CrossVal(data, target, learners, folds):
     """
     Compute a k-folds validation on a scikit-learn data set for several models
     """
-    learner_score = []
+    learner_scores = []
     for model in learners:
         scores = cross_validation.cross_val_score(model, data, target, cv=folds)
-        learner_score.append(sum(scores) / len(scores))
-    return learner_score
+        learner_scores.append(sum(scores) / len(scores))
+    return learner_scores
+
+def plot_validation_curve(estimator, X, y, param_name, param_range, addition_graph_points, graph_title, graph_xlabel, graph_ylabel, ylim):
+	
+	cv_train_scores, cv_test_scores = validation_curve(estimator, X, y, param_name=param_name, param_range=param_range, cv=5, scoring="accuracy")
+
+	cv_train_scores_mean = np.mean(cv_train_scores, axis=1)
+	cv_train_scores_std = np.std(cv_train_scores, axis=1)
+	cv_test_scores_mean = np.mean(cv_test_scores, axis=1)
+	cv_test_scores_std = np.std(cv_test_scores, axis=1)
+
+	plt.title(graph_title)
+	plt.xlabel(graph_xlabel)
+	plt.ylabel(graph_ylabel)
+	plt.ylim(*ylim)
+
+	plt.fill_between(min_samples_split, cv_train_scores_mean - cv_train_scores_std, cv_train_scores_mean + cv_train_scores_std, alpha=0.1, color="r")
+	plt.fill_between(min_samples_split, cv_test_scores_mean - cv_test_scores_std,cv_test_scores_mean + cv_test_scores_std, alpha=0.1, color="b")
+	plt.plot(min_samples_split, cv_train_scores_mean, 'o-', color="r", label="Cross Validation Training score")
+	plt.plot(min_samples_split, cv_test_scores_mean, 'o-', color="b",label="Cross Validation Test Score")
+	
+	for gp in addition_graph_points:
+		plt.plot(min_samples_split, gp['data'], 'o-', color=gp['color'],label=gp['label'])
+
+	plt.legend(loc="best")
+	plt.show()
 
 #*******************End of Functions**************
 #*******************Prepare Data & Target for Estimators******************
@@ -68,34 +95,14 @@ le.fit(ExtractedTarget_array)
 
 Target = le.transform(ExtractedTarget_array)
 
-print("this is the target label encoded",len(Target))
-
 vec = DictVectorizer()
 Data = vec.fit_transform(FormatedRawData).toarray()
 
 # Normalize data
 Data = preprocessing.normalize(Data, norm='l2', axis=0)
 
+# split data into training and test sets
 DataTrain, DataTest, TargetTrain, TargetTest = train_test_split(Data, Target, test_size=0.33, random_state=0)
-
-print()
-print (Data.shape, "Original data create\n")
-print (DataTrain.shape, "Training data create\n")
-print (DataTest.shape, "Training data create\n")
-print()
-
-'''
-#prepare data for pybrain
-number_of_columns = Data.shape[1]
-PyBData = ClassificationDataSet(number_of_columns, 1, nb_classes=2)
-print(PyBData)
-assert(Data.shape[0] == Target.shape[0])
-PyBData.setField('input', Data)
-print(PyBData)
-print("target shape",Target.shape[0])
-PyBData.setField('output', Target)
-print(PyBData)
-'''
 
 #prepare data for pybrain
 number_of_columns = Data.shape[1]
@@ -112,43 +119,49 @@ for i in xrange(len(DataTrain)):
 for i in xrange(len(DataTest)):
 	PyBDataTest.appendLinked(DataTest[i], TargetTest[i])
 
-print ("This is the input size in PyBData", len(PyBData['input']))
-print ("This is the target size in PyBData", len(PyBData['target']))
-print ("This is the input size in PyBDataTrain", len(PyBDataTrain['input']))
-print ("This is the target size in PyBDataTrain", len(PyBDataTrain['target']))
-print ("This is the input size in PyBDataTest", len(PyBDataTest['input']))
-print ("This is the target size in PyBDataTest", len(PyBDataTest['target']))
-print ("This is the Data", Data)
-print ("This is the Target", Target)
-print ("This is the input in PyData", PyBData['input'])
-print ("This is the target in PyData", PyBData['target'])
-
 #*******************End of Preparing Data & Target for Estimators******************
 #*******************Decision Tree Classification******************
-
+'''
 clf_dt = tree.DecisionTreeClassifier(criterion="entropy")
 clf_dt = clf_dt.fit(DataTrain, TargetTrain)
 
 print()
-print ("Training accuracy of DT", clf_dt.score(DataTrain, TargetTrain))
-print ("Testing accuracy of DT", clf_dt.score(DataTest, TargetTest))
+print ("Training accuracy of Decision Tree with default settings and criterion=entropy", clf_dt.score(DataTrain, TargetTrain))
+print ("Testing accuracy of Decision Tree with default settings and criterion=entropy", clf_dt.score(DataTest, TargetTest))
 print()
 
-#Cross validation 
-learners = []
-learners.append(tree.DecisionTreeClassifier())
-learners.append(tree.DecisionTreeClassifier(criterion="entropy"))
-learners.append(tree.DecisionTreeClassifier(min_samples_split=20))
-learners.append(tree.DecisionTreeClassifier(min_samples_leaf=5))
-print("CV DT scores", KFolds_CrossVal(DataTrain, TargetTrain, learners, 5))
+# create points for validation curve plotting of the accuracy score of full Training and Test data on varying values of min_sample_split
+min_samples_split = np.linspace(50, 5000, 100)
+full_train_score = []
+unseen_test_scores = []
 
-'''
-dot_data = StringIO()
-tree.export_graphviz(clf_dt, out_file=dot_data)
-graph = pydot.graph_from_dot_data(dot_data.getvalue())
-print(graph)
-graph.write_pdf("scikit_tree.pdf")
-'''
+for m in min_samples_split:
+	clf_dt = tree.DecisionTreeClassifier(criterion="entropy", min_samples_split=m)
+	clf_dt = clf_dt.fit(DataTrain, TargetTrain)
+	full_train_score.append(clf_dt.score(DataTrain, TargetTrain))
+	unseen_test_scores.append(clf_dt.score(DataTest, TargetTest))
+
+# Variable for plotting validation curve
+addition_graph_points = [{'data':full_train_score, 'color':'y', 'label': 'Full Training Data Score'}, 
+	{'data':unseen_test_scores, 'color':'g', 'label': 'Full Training Data Score'}]
+graph_title = "Decision Tree Validation Curve"
+graph_xlabel = "Min Samples Split"
+graph_ylabel = "Score"
+ylim = (.7, 1.1)
+param_name = "min_samples_split"
+estimator = tree.DecisionTreeClassifier(criterion="entropy")
+
+#call validation curve plotting function.
+plot_validation_curve(estimator, DataTrain, TargetTrain, param_name, min_samples_split, addition_graph_points, graph_title, graph_xlabel, graph_ylabel, ylim)	
+
+
+# perform GridSearchCV on decision tree of varying min_sample_split
+param_grid = {'min_samples_split':min_samples_split}
+grid = GridSearchCV(clf_dt, param_grid=param_grid, cv=5)
+grid.fit(DataTrain,TargetTrain)
+
+print("This is the best score achieved by Decision Tree using GridSearchCV on varying min_sample_split", grid.best_score_)
+print("This is the best parameters that achieved the best scores on the Decision Tree using GridSearchCV on varying min_sample_split", grid.best_params_)
 
 #*******************Neural Network Classification******************
 PyBDataTrain_nn = copy.deepcopy(PyBDataTrain)
@@ -184,14 +197,43 @@ print ("\n" + "*" * 50)
 print ("DEFAULT NEURAL NETWORK")
 print ("Training Accuracy: " + str(1 - percentError(trainer.testOnClassData(), PyBDataTrain_nn['class'])/100.0))
 print ("Testing Accuracy: " + str(1 - percentError(trainer.testOnClassData(dataset=PyBDataTest_nn), PyBDataTest_nn['class'])/100.0))
-
+'''
 #*******************K Nearest Neighbour Classification******************
-neigh = KNeighborsClassifier(n_neighbors=1)
+neigh = KNeighborsClassifier()
 neigh.fit(DataTrain, TargetTrain)
 
 print ("Training accuracy of KNN", neigh.score(DataTrain, TargetTrain))
 print ("Testing accuracy of KNN", neigh.score(DataTest, TargetTest))
 print()
+
+# create points for validation curve plotting of the accuracy score of full Training and Test data on varying values of min_sample_split
+n_neighbors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+p = [1,2]
+full_train_score = []
+unseen_test_scores = []
+
+for d in p:
+	for n in n_neighbors:
+		neigh = KNeighborsClassifier(n_neighbors=n, p=d)
+		neigh = neigh.fit(DataTrain, TargetTrain)
+		full_train_score.append(neigh.score(DataTrain, TargetTrain))
+		unseen_test_scores.append(neigh.score(DataTest, TargetTest))
+		print("data created for knn = ", n)
+
+	# Variable for plotting validation curve
+	addition_graph_points = [{'data':full_train_score, 'color':'y', 'label': 'Full Training Data Score'}, 
+		{'data':unseen_test_scores, 'color':'g', 'label': 'Full Training Data Score'}]
+	graph_title = "KNN Validation Curve"
+	graph_xlabel = "Number of Nearest Neighbours"
+	graph_ylabel = "Score"
+	ylim = (.7, 1.1)
+	param_name = "n_neighbors"
+	estimator = KNeighborsClassifier(p=d)
+
+	#call validation curve plotting function.
+	plot_validation_curve(estimator, DataTrain, TargetTrain, param_name, n_neighbors, addition_graph_points, graph_title, graph_xlabel, graph_ylabel, ylim)	
+
+
 
 #*******************Boosting Classification******************
 clf_boost = ensemble.AdaBoostClassifier()
