@@ -207,7 +207,7 @@ print ("Testing accuracy of KNN", neigh.score(DataTest, TargetTest))
 print()
 
 # create points for validation curve plotting of the accuracy score of full Training and Test data on varying values of min_sample_split
-n_neighbors = [1, 2, 3, 4, 5]
+n_neighbors = [1, 2, 3]
 p = [1,2]
 full_train_score = []
 unseen_test_scores = []
