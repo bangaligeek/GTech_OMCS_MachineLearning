@@ -268,7 +268,7 @@ print ("DEFAULT NEURAL NETWORK")
 print ("Training Accuracy: " + str(1 - percentError(trainer.testOnClassData(), PyBDataTrain_nn['class'])/100.0))
 print ("Testing Accuracy: " + str(1 - percentError(trainer.testOnClassData(dataset=PyBDataTest_nn), PyBDataTest_nn['class'])/100.0))
 
-print("Exiting Decision Tree Classifier with time ", time.localtime())
+print("Exiting Neural Network Classifier with time ", time.localtime())
 
 #*******************K Nearest Neighbour Classification******************
 print("Entering KNN Classifier with time ", time.localtime())
@@ -290,7 +290,7 @@ estimator = KNeighborsClassifier()
 plot_learning_curve(estimator, DataTrain, TargetTrain, graph_title, graph_xlabel, graph_ylabel, ylim)
 
 # create points for validation curve plotting
-n_neighbors = np.arange(1, 11, 1)
+n_neighbors = np.arange(1, 21, 1)
 p = [1,2]
 
 for d in p:
@@ -338,7 +338,7 @@ print("End of grid search", time.localtime())
 print("This is the best score achieved by KNN using GridSearchCV on varying n_neighbors and p values", grid.best_score_)
 print("This are the best parameters that achieved the best scores on the KNN using GridSearchCV on varying n_neighbors and p values", grid.best_params_)
 
-neigh = KNeighborsClassifier(n_neighbors=grid.best_score_['n_neighbors'], p=grid.best_score_['p'])
+neigh = KNeighborsClassifier(n_neighbors=grid.best_params_['n_neighbors'], p=grid.best_params_['p'])
 neigh = neigh.fit(DataTrain, TargetTrain)
 print ("Training accuracy of KNN with best parameter from grid search", neigh.score(DataTrain, TargetTrain))
 print ("Testing accuracy of KNN with best parameter from grid search", neigh.score(DataTest, TargetTest))
