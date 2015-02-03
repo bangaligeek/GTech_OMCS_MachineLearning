@@ -1,0 +1,121 @@
+Microsoft Windows [Version 6.1.7601]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+C:\Users\akhan39>cd C:\Users\akhan39\Desktop\RIM\GitHub_repos\GTech_OMCS_MachineLearning\Assignment1
+
+
+C:\Users\akhan39\Desktop\RIM\GitHub_repos\GTech_OMCS_MachineLearning\Assignment1>python aminulkhanas
+signment1.py
+time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=6, tm_min=4, tm_sec=2, tm_wday=0, tm_yda
+y=33, tm_isdst=0)
+Machine Learning Program Started
+
+
+('Th complete dataset shape is : ', (32561L, 108L))
+('Th complete target shape is : ', (32561L,))
+('The training data shape is (2/3 of complete dataset): ', (21815L, 108L))
+('The training target shape is (2/3 of complete target): ', (21815L,))
+('The test data shape is (1/3 of complete dataset): ', (10746L, 108L))
+('The test target shape is (1/3 of complete target): ', (10746L,))
+
+
+('Entering KNN Classifier with time ', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=6
+, tm_min=4, tm_sec=4, tm_wday=0, tm_yday=33, tm_isdst=0))
+('Completed initial fit', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=6, tm_min=4, t
+m_sec=5, tm_wday=0, tm_yday=33, tm_isdst=0))
+('Training accuracy of KNN with default settings', 0.87384826953930783)
+('Testing accuracy of KNN with default settings', 0.82319002419504927)
+Entering loop for KNN validation curve for p value 1
+Done gathering all the data points for KNN valiation curve for p value 1
+Entering loop for KNN validation curve for p value 2
+Done gathering all the data points for KNN valiation curve for p value 2
+('Start of grid search', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=8, tm_min=30, t
+m_sec=57, tm_wday=0, tm_yday=33, tm_isdst=0))
+('End of grid search', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=8, tm_min=51, tm_
+sec=52, tm_wday=0, tm_yday=33, tm_isdst=0))
+('This is the best score achieved by KNN using GridSearchCV on varying n_neighbors and p values', 0.
+82855833142333257)
+('This are the best parameters that achieved the best scores on the KNN using GridSearchCV on varyin
+g n_neighbors and p values', {'n_neighbors': 9, 'p': 1})
+Traceback (most recent call last):
+  File "aminulkhanassignment1.py", line 342, in <module>
+    neigh = KNeighborsClassifier(n_neighbors=grid.best_score_['n_neighbors'], p=grid.best_score_['p'
+])
+IndexError: invalid index to scalar variable.
+
+C:\Users\akhan39\Desktop\RIM\GitHub_repos\GTech_OMCS_MachineLearning\Assignment1>python aminulkhanas
+signment1.py
+time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=8, tm_min=59, tm_sec=43, tm_wday=0, tm_y
+day=33, tm_isdst=0)
+Machine Learning Program Started
+
+
+('Th complete dataset shape is : ', (32561L, 108L))
+('Th complete target shape is : ', (32561L,))
+('The training data shape is (2/3 of complete dataset): ', (21815L, 108L))
+('The training target shape is (2/3 of complete target): ', (21815L,))
+('The test data shape is (1/3 of complete dataset): ', (10746L, 108L))
+('The test target shape is (1/3 of complete target): ', (10746L,))
+
+
+('Training accuracy of KNN with best parameter from grid search', 0.86014210405684166)
+('Testing accuracy of KNN with best parameter from grid search', 0.83072771263726042)
+Exiting KNN Classifier
+
+
+('Entering Boosting Classifier with time ', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_h
+our=9, tm_min=1, tm_sec=30, tm_wday=0, tm_yday=33, tm_isdst=0))
+('Completed initial fit ', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=9, tm_min=1,
+tm_sec=33, tm_wday=0, tm_yday=33, tm_isdst=0))
+('Training accuracy of Boosting', 0.86215906486362592)
+('Testing accuracy of Boosting', 0.85836590359203424)
+()
+[ 50 100 150 200 250 300 350 400 450 500]
+forrtl: error (200): program aborting due to control-C event
+Image              PC                Routine            Line        Source
+kernel32.dll       0000000077BA4AE3  Unknown               Unknown  Unknown
+kernel32.dll       0000000077B659ED  Unknown               Unknown  Unknown
+ntdll.dll          0000000077C9C541  Unknown               Unknown  Unknown
+
+C:\Users\akhan39\Desktop\RIM\GitHub_repos\GTech_OMCS_MachineLearning\Assignment1>python aminulkhanas
+signment1.py
+time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=9, tm_min=7, tm_sec=58, tm_wday=0, tm_yd
+ay=33, tm_isdst=0)
+Machine Learning Program Started
+
+
+('Th complete dataset shape is : ', (32561L, 108L))
+('Th complete target shape is : ', (32561L,))
+('The training data shape is (2/3 of complete dataset): ', (21815L, 108L))
+('The training target shape is (2/3 of complete target): ', (21815L,))
+('The test data shape is (1/3 of complete dataset): ', (10746L, 108L))
+('The test target shape is (1/3 of complete target): ', (10746L,))
+
+
+('Entering KNN Classifier with time ', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=9
+, tm_min=7, tm_sec=59, tm_wday=0, tm_yday=33, tm_isdst=0))
+('Completed initial fit', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=9, tm_min=8, t
+m_sec=0, tm_wday=0, tm_yday=33, tm_isdst=0))
+('Training accuracy of KNN with default settings', 0.87384826953930783)
+('Testing accuracy of KNN with default settings', 0.82319002419504927)
+Entering loop for KNN validation curve for p value 1
+Done gathering all the data points for KNN valiation curve for p value 1
+Entering loop for KNN validation curve for p value 2
+Done gathering all the data points for KNN valiation curve for p value 2
+('Start of grid search', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=14, tm_min=11,
+tm_sec=3, tm_wday=0, tm_yday=33, tm_isdst=0))
+('End of grid search', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=14, tm_min=55, tm
+_sec=51, tm_wday=0, tm_yday=33, tm_isdst=0))
+('This is the best score achieved by KNN using GridSearchCV on varying n_neighbors and p values', 0.
+83085033234013295)
+('This are the best parameters that achieved the best scores on the KNN using GridSearchCV on varyin
+g n_neighbors and p values', {'n_neighbors': 19, 'p': 1})
+('Training accuracy of KNN with best parameter from grid search', 0.84698601879440749)
+('Testing accuracy of KNN with best parameter from grid search', 0.83435697003536202)
+Exiting KNN Classifier
+
+
+('End of Machine Learning Program with time', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm
+_hour=14, tm_min=57, tm_sec=47, tm_wday=0, tm_yday=33, tm_isdst=0))
+
+C:\Users\akhan39\Desktop\RIM\GitHub_repos\GTech_OMCS_MachineLearning\Assignment1>
