@@ -189,7 +189,7 @@ estimator = tree.DecisionTreeClassifier(criterion="entropy")
 plot_learning_curve(estimator, DataTrain, TargetTrain, graph_title, graph_xlabel, graph_ylabel, ylim)
 
 # create points for validation curve plotting of the accuracy score of full Training and Test data on varying values of min_sample_split
-min_samples_split = np.arange(50, 5050, 50)
+min_samples_split = np.arange(50, 1550, 50)
 full_train_score = []
 unseen_test_scores = []
 
@@ -363,10 +363,10 @@ graph_xlabel = "Number of Samples"
 graph_ylabel = "Score"
 ylim = (.7, 1.1)
 estimator = ensemble.AdaBoostClassifier()
-#plot_learning_curve(estimator, DataTrain, TargetTrain, graph_title, graph_xlabel, graph_ylabel, ylim)
+plot_learning_curve(estimator, DataTrain, TargetTrain, graph_title, graph_xlabel, graph_ylabel, ylim)
 
 # Validation curve data points creation
-n_estimators = np.arange(50, 550, 50)
+n_estimators = np.arange(50, 1550, 50)
 print(n_estimators)
 full_train_score = []
 unseen_test_scores = []
@@ -403,13 +403,14 @@ print("End of grid search", time.localtime())
 print("This is the best score achieved by AdaBoosting using GridSearchCV on varying n_estimators ", grid.best_score_)
 print("This are the best parameters that achieved the best scores on the AdaBoosting using GridSearchCV on varying n_estimators ", grid.best_params_)
 
-clf_boost = ensemble.AdaBoostClassifier(n_estimators=grid.best_score_['n_estimators'])
+clf_boost = ensemble.AdaBoostClassifier(n_estimators=grid.best_params_['n_estimators'])
 clf_boost = clf_boost.fit(DataTrain, TargetTrain)
 
 print ("Training accuracy of AdaBoost with best parameter from grid search", clf_boost.score(DataTrain, TargetTrain))
 print ("Testing accuracy of AdaBoost with best parameter from grid search", clf_boost.score(DataTest, TargetTest))
 print("Exiting Boosting Classifier")
 print("\n")
+
 
 #*******************SVM Classification******************
 print("Entering SVM Classifier with time ", time.localtime())
@@ -439,4 +440,4 @@ print("Exiting SVM Classifier")
 
 print("\n")
 
-print("End of Machine Learning Program")
+print("End of Machine Learning Program with time", time.localtime())
