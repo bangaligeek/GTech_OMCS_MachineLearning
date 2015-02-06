@@ -22,7 +22,7 @@ from pybrain.structure.modules   import SoftmaxLayer
 from sklearn.grid_search import GridSearchCV
 from sklearn.learning_curve import validation_curve
 from sklearn.learning_curve import learning_curve
-#import time
+import time
 
 #*******************All Functions*****************
 print (time.localtime())
