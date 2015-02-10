@@ -35,7 +35,7 @@ def extract_target_ConvertStringNumber(InputData, numStringKeys, classKey):
 		del d[classKey]
 		for k in numStringKeys:
 			d[k] = float(d[k])
-
+	
 	return (InputData, ExtractedTarget)
 
 
@@ -72,7 +72,7 @@ def plot_validation_curve(estimator, X, y, param_name, param_range, addition_gra
 		plt.plot(param_range, gp['data'], 'o-', color=gp['color'],label=gp['label'])
 
 	plt.legend(loc="best")
-	plt.savefig('plots/BreastCancerPlots/'+graph_title+'.png')
+	plt.savefig('plots/CarPlots/'+graph_title+'.png')
 	plt.close()
 	#plt.show()
 
@@ -105,7 +105,7 @@ def plot_learning_curve(estimator, X, y, graph_title, graph_xlabel, graph_ylabel
              label="Cross Validation Test Score")
 
     plt.legend(loc="best")
-    plt.savefig('plots/BreastCancerPlots/'+graph_title+'.png')
+    plt.savefig('plots/CarPlots/'+graph_title+'.png')
     plt.close()
     #plt.show()
 
@@ -113,9 +113,9 @@ def plot_learning_curve(estimator, X, y, graph_title, graph_xlabel, graph_ylabel
 #*******************Prepare Data & Target for Estimators******************
 print("Machine Learning Program Started")
 
-InputData = list(csv.DictReader(open('BreastCancerWisconsinDataset.txt', 'rU')))
+InputData = list(csv.DictReader(open('CarQualityDataset.txt', 'rU')))
 
-numStringKeys = ['ClumpThickness','UniformityCellSize','UniformityCellShape','MarginalAdhesion','SingleEpithelialCellSize','BareNuclei','BlandChromatin','NormalNucleoli','Mitoses']
+numStringKeys = []
 classKey = 'Class'
 ExtractedTarget = []
 
@@ -124,7 +124,7 @@ FormatedRawData, ExtractedTarget = extract_target_ConvertStringNumber(InputData,
 ExtractedTarget_array = np.array(ExtractedTarget)
 
 le = preprocessing.LabelEncoder()
-le.fit(ExtractedTarget_array)
+le.fit(["unacc", "acc", "good", "vgood"])
 
 Target = le.transform(ExtractedTarget_array)
 
@@ -148,9 +148,9 @@ print("\n")
 
 #prepare data for pybrain
 number_of_columns = Data.shape[1]
-PyBData = ClassificationDataSet(number_of_columns, 1, nb_classes=2)
-PyBDataTrain = ClassificationDataSet(number_of_columns, 1, nb_classes=2)
-PyBDataTest = ClassificationDataSet(number_of_columns, 1, nb_classes=2)
+PyBData = ClassificationDataSet(number_of_columns, 1, nb_classes=4)
+PyBDataTrain = ClassificationDataSet(number_of_columns, 1, nb_classes=4)
+PyBDataTest = ClassificationDataSet(number_of_columns, 1, nb_classes=4)
 
 for i in xrange(len(Data)):
 	PyBData.appendLinked(Data[i], Target[i])
@@ -183,7 +183,7 @@ estimator = tree.DecisionTreeClassifier(criterion="entropy")
 plot_learning_curve(estimator, DataTrain, TargetTrain, graph_title, graph_xlabel, graph_ylabel, ylim)
 
 # create points for validation curve plotting of the accuracy score of full Training and Test data on varying values of min_sample_split
-min_samples_split = np.arange(5, 130, 5)
+min_samples_split = np.arange(50, 850, 50)
 full_train_score = []
 unseen_test_scores = []
 
@@ -232,10 +232,12 @@ print("Entering Neural Network Classifier with time ", time.localtime())
 PyBDataTrain_nn = copy.deepcopy(PyBDataTrain)
 PyBDataTest_nn = copy.deepcopy(PyBDataTest)
 
+print("PyBDataTrain_nn data ",PyBDataTest_nn['class'])
+
 PyBDataTrain_nn._convertToOneOfMany()
 PyBDataTest_nn._convertToOneOfMany()
 
-fnn = buildNetwork(PyBDataTrain_nn.indim, 2, PyBDataTrain_nn.outdim, outclass=SoftmaxLayer)
+fnn = buildNetwork(PyBDataTrain_nn.indim, 4, PyBDataTrain_nn.outdim, outclass=SoftmaxLayer)
 trainer = BackpropTrainer( fnn, dataset=PyBDataTrain_nn, momentum=0.1, verbose=True, weightdecay=0.01)
 
 epochs = 6
@@ -284,7 +286,7 @@ estimator = KNeighborsClassifier()
 plot_learning_curve(estimator, DataTrain, TargetTrain, graph_title, graph_xlabel, graph_ylabel, ylim)
 
 # create points for validation curve plotting
-n_neighbors = np.arange(1, 16, 1)
+n_neighbors = np.arange(1, 21, 1)
 p = [1,2]
 
 for d in p:
@@ -405,6 +407,7 @@ print ("Testing accuracy of AdaBoost with best parameter from grid search", clf_
 print("Exiting Boosting Classifier")
 print("\n")
 
+
 #*******************SVM Classification******************
 print("Entering SVM Classifier with time ", time.localtime())
 
@@ -421,7 +424,7 @@ print()
 graph_title = "SVM Learning Curve"
 graph_xlabel = "Number of Samples"
 graph_ylabel = "Score"
-ylim = (.5, 1.1)
+ylim = (.7, 1.0)
 estimator = svm.SVC(kernel='linear')
 plot_learning_curve(estimator, DataTrain, TargetTrain, graph_title, graph_xlabel, graph_ylabel, ylim)
 

@@ -1,0 +1,117 @@
+Last login: Mon Feb  2 21:51:26 on ttys000
+new-host-6:~ shujon$ cd desktop/aminul_khan/github_repos/gtech_omcs_machinelearning/assignment1
+new-host-6:assignment1 shujon$ ls
+BreastCancerWisconsinDataset.txt
+BreastCancerWisconsinDataset_original.txt
+CarQualityDataset.txt
+akhan312_ScriptForBreastCancerDataSet.py
+akhan312_ScriptForCarQualityDataSet.py
+akhan312_ScriptForIncomeDataSet.py
+breast-cancer-wisconsin_datainfo.txt
+income_data_withheader.txt
+mac_first_ml_run_log_DT_SVM.txt
+old_test_files
+plots
+windows_02022015_run_log.txt
+new-host-6:assignment1 shujon$ 
+new-host-6:assignment1 shujon$ 
+new-host-6:assignment1 shujon$ 
+new-host-6:assignment1 shujon$ python akhan312_ScriptForBreastCancerDataSet.py
+time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=21, tm_min=54, tm_sec=36, tm_wday=0, tm_yday=33, tm_isdst=0)
+Machine Learning Program Started
+
+
+('Th complete dataset shape is : ', (699, 9))
+('Th complete target shape is : ', (699,))
+('The training data shape is (2/3 of complete dataset): ', (468, 9))
+('The training target shape is (2/3 of complete target): ', (468,))
+('The test data shape is (1/3 of complete dataset): ', (231, 9))
+('The test target shape is (1/3 of complete target): ', (231,))
+
+
+('Entering Decision Tree Classifier with starting time', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=21, tm_min=54, tm_sec=36, tm_wday=0, tm_yday=33, tm_isdst=0))
+('Completed initial fit', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=21, tm_min=54, tm_sec=36, tm_wday=0, tm_yday=33, tm_isdst=0))
+('Training accuracy of Decision Tree with default settings and criterion=entropy', 1.0)
+('Testing accuracy of Decision Tree with default settings and criterion=entropy', 0.92207792207792205)
+('Start of grid search', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=21, tm_min=54, tm_sec=37, tm_wday=0, tm_yday=33, tm_isdst=0))
+('End of grid search', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=21, tm_min=54, tm_sec=37, tm_wday=0, tm_yday=33, tm_isdst=0))
+('This is the best score achieved by Decision Tree using GridSearchCV on varying min_sample_split', 0.95085470085470081)
+('This is the best parameters that achieved the best scores on the Decision Tree using GridSearchCV on varying min_sample_split', {'min_samples_split': 5})
+('Training accuracy of Decision Tree with best parameter from grid search', 0.99786324786324787)
+('Testing accuracy of Decision Tree with best parameter from grid search', 0.92207792207792205)
+Exiting Decision Tree Classifier
+
+
+('Entering Neural Network Classifier with time ', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=21, tm_min=54, tm_sec=37, tm_wday=0, tm_yday=33, tm_isdst=0))
+Total error:  0.119281879247
+Total error:  0.114971443462
+Total error:  0.114555383463
+('epoch:    3', ' train error: 33.76%', ' test error: 35.93%')
+Total error:  0.114128779402
+Total error:  0.113717959991
+Total error:  0.11339426013
+('epoch:    6', ' train error: 33.76%', ' test error: 35.93%')
+Total error:  0.113371111873
+Total error:  0.113065854847
+Total error:  0.11309702575
+('epoch:    9', ' train error: 33.76%', ' test error: 35.93%')
+Total error:  0.112446478745
+Total error:  0.112894268659
+Total error:  0.112458367655
+('epoch:   12', ' train error: 33.76%', ' test error: 35.93%')
+Total error:  0.112612884379
+Total error:  0.112455871143
+Total error:  0.112462258424
+('epoch:   15', ' train error: 33.76%', ' test error: 35.93%')
+Total error:  0.112244091915
+Total error:  0.112563834965
+Total error:  0.112124835092
+('epoch:   18', ' train error: 33.76%', ' test error: 35.93%')
+DEFAULT NEURAL NETWORK
+Training Accuracy: 0.662393162393
+Testing Accuracy: 0.640692640693
+('Exiting Neural Network Classifier with time ', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=21, tm_min=54, tm_sec=46, tm_wday=0, tm_yday=33, tm_isdst=0))
+('Entering KNN Classifier with time ', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=21, tm_min=54, tm_sec=46, tm_wday=0, tm_yday=33, tm_isdst=0))
+('Completed initial fit', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=21, tm_min=54, tm_sec=46, tm_wday=0, tm_yday=33, tm_isdst=0))
+('Training accuracy of KNN with default settings', 0.98076923076923073)
+('Testing accuracy of KNN with default settings', 0.92640692640692646)
+Entering loop for KNN validation curve for p value 1
+Done gathering all the data points for KNN valiation curve for p value 1
+Entering loop for KNN validation curve for p value 2
+Done gathering all the data points for KNN valiation curve for p value 2
+('Start of grid search', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=21, tm_min=54, tm_sec=49, tm_wday=0, tm_yday=33, tm_isdst=0))
+('End of grid search', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=21, tm_min=54, tm_sec=49, tm_wday=0, tm_yday=33, tm_isdst=0))
+('This is the best score achieved by KNN using GridSearchCV on varying n_neighbors and p values', 0.97435897435897434)
+('This are the best parameters that achieved the best scores on the KNN using GridSearchCV on varying n_neighbors and p values', {'n_neighbors': 7, 'p': 1})
+('Training accuracy of KNN with best parameter from grid search', 0.97435897	435897434)
+('Testing accuracy of KNN with best parameter from grid search', 0.94805194805194803)
+Exiting KNN Classifier
+
+
+('Entering Boosting Classifier with time ', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=21, tm_min=54, tm_sec=49, tm_wday=0, tm_yday=33, tm_isdst=0))
+('Completed initial fit ', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=21, tm_min=54, tm_sec=49, tm_wday=0, tm_yday=33, tm_isdst=0))
+('Training accuracy of Boosting', 1.0)
+('Testing accuracy of Boosting', 0.94805194805194803)
+()
+[  50  100  150  200  250  300  350  400  450  500  550  600  650  700  750
+  800  850  900  950 1000 1050 1100 1150 1200 1250 1300 1350 1400 1450 1500]
+('Start of grid search', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=21, tm_min=57, tm_sec=58, tm_wday=0, tm_yday=33, tm_isdst=0))
+('End of grid search', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=22, tm_min=0, tm_sec=10, tm_wday=0, tm_yday=33, tm_isdst=0))
+('This is the best score achieved by AdaBoosting using GridSearchCV on varying n_estimators ', 0.97222222222222221)
+('This are the best parameters that achieved the best scores on the AdaBoosting using GridSearchCV on varying n_estimators ', {'n_estimators': 650})
+('Training accuracy of AdaBoost with best parameter from grid search', 1.0)
+('Testing accuracy of AdaBoost with best parameter from grid search', 0.95238095238095233)
+Exiting Boosting Classifier
+
+
+('Entering SVM Classifier with time ', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=22, tm_min=0, tm_sec=11, tm_wday=0, tm_yday=33, tm_isdst=0))
+('Completed initial fit', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=22, tm_min=0, tm_sec=11, tm_wday=0, tm_yday=33, tm_isdst=0))
+('Training accuracy of SVM', 0.95299145299145294)
+('Testing accuracy of SVM', 0.92640692640692646)
+()
+('The mean accuracy score of kfold cross validation for SVM with linear kernal is ', 0.92942118508350491)
+Exiting SVM Classifier
+
+
+('End of Machine Learning Program with time', time.struct_time(tm_year=2015, tm_mon=2, tm_mday=2, tm_hour=22, tm_min=0, tm_sec=11, tm_wday=0, tm_yday=33, tm_isdst=0))
+new-host-6:assignment1 shujon$ 

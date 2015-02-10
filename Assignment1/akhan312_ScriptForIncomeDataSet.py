@@ -35,12 +35,6 @@ def extract_target_ConvertStringNumber(InputData, numStringKeys, classKey):
 		del d[classKey]
 		for k in numStringKeys:
 			d[k] = float(d[k])
-		d['age'] = float(d['age'])
-		d['fnlwgt'] = float(d['fnlwgt'])
-		d['education-num'] = float(d['education-num'])
-		d['capital-gain'] = float(d['capital-gain'])
-		d['capital-loss'] = float(d['capital-loss'])
-		d['hours-per-week'] = float(d['hours-per-week'])
 	
 	return (InputData, ExtractedTarget)
 
@@ -201,7 +195,7 @@ for m in min_samples_split:
 
 # Variable for plotting validation curve
 addition_graph_points = [{'data':full_train_score, 'color':'y', 'label': 'Full Training Data Score'}, 
-	{'data':unseen_test_scores, 'color':'g', 'label': 'Full Training Data Score'}]
+	{'data':unseen_test_scores, 'color':'g', 'label': 'Full Test Data Score'}]
 graph_title = "Decision Tree Validation Curve"
 graph_xlabel = "Min Samples Split"
 graph_ylabel = "Score"
@@ -308,7 +302,7 @@ for d in p:
 
 	# Variable for plotting validation curve
 	addition_graph_points = [{'data':full_train_score, 'color':'y', 'label': 'Full Training Data Score'}, 
-		{'data':unseen_test_scores, 'color':'g', 'label': 'Full Training Data Score'}]
+		{'data':unseen_test_scores, 'color':'g', 'label': 'Full Test Data Score'}]
 	if d==1:
 		graph_title = "KNN Validation Curve Using Manhattan Distance"
 	elif d==2:
@@ -379,7 +373,7 @@ for m in n_estimators:
 
 # Variable for plotting validation curve
 addition_graph_points = [{'data':full_train_score, 'color':'y', 'label': 'Full Training Data Score'}, 
-	{'data':unseen_test_scores, 'color':'g', 'label': 'Full Training Data Score'}]
+	{'data':unseen_test_scores, 'color':'g', 'label': 'Full Test Data Score'}]
 graph_title = "AdaBoosting Validation Curve"
 graph_xlabel = "Number of Estimators"
 graph_ylabel = "Score"
