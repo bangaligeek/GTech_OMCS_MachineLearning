@@ -1,0 +1,40 @@
+Data Target Labels: [0 1 2 3]
+Data Target Stats: [258  42 811  46]
+
+
+Cluster Stats For K = 1
+Unique Labels: [0]
+Status Corresponding To The Labels: [1157]
+
+Cluster Stats For K = 2
+Unique Labels: [0 1]
+Status Corresponding To The Labels: [859 298]
+
+Cluster Stats For K = 3
+Unique Labels: [0 1 2]
+Status Corresponding To The Labels: [497 269 391]
+
+Cluster Stats For K = 4
+Unique Labels: [0 1 2 3]
+Status Corresponding To The Labels: [268 263 296 330]
+
+Cluster Stats For K = 5
+Unique Labels: [0 1 2 3 4]
+Status Corresponding To The Labels: [234 179 238 247 259]
+
+Cluster Stats For K = 6
+Unique Labels: [0 1 2 3 4 5]
+Status Corresponding To The Labels: [195 215 167 246 156 178]
+
+Cluster Stats For K = 7
+Unique Labels: [0 1 2 3 4 5 6]
+Status Corresponding To The Labels: [139 171 160 219 173 128 167]
+
+Cluster Stats For K = 8
+Unique Labels: [0 1 2 3 4 5 6 7]
+Status Corresponding To The Labels: [156 120  96 136 161 179 163 146]
+
+Cluster Stats For K = 9
+Unique Labels: [0 1 2 3 4 5 6 7 8]
+Status Corresponding To The Labels: [133  92 121 119 128 133 171 127 133]
+

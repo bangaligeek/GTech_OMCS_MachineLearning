@@ -29,6 +29,38 @@ def testOnClassData_custom(net, dataset=None):
             res = net.activate(i)
             out.append(argmax(res))
         return out
+
+def plot_learning_curve(x, training_erorr, test_error, graph_title, graph_xlabel, graph_ylabel, ylim=None):
+    
+    plt.figure()
+    plt.title(graph_title)
+    if ylim is not None:
+        plt.ylim(*ylim)
+    plt.xlabel(graph_xlabel)
+    plt.ylabel(graph_ylabel)
+
+    train_error_mean = np.mean(training_erorr)
+    train_error_std = np.std(training_erorr)
+    test_error_mean = np.mean(test_error)
+    test_error_std = np.std(test_error)
+
+    plt.grid()
+
+    plt.fill_between(x, training_erorr - train_error_std,
+                     training_erorr + train_error_std, alpha=0.1,
+                     color="r")
+    plt.fill_between(x, test_error - test_error_std,
+                     test_error + test_error_std, alpha=0.1, color="g")
+    print x
+    print train_error_mean
+    print training_erorr
+    plt.plot(x, training_erorr, 'o-', color="r", label="Training score")
+    plt.plot(x, test_error, 'o-', color="g", label="Test Score")
+
+    plt.legend(loc="best")
+    plt.savefig('plots/'+graph_title+'.png')
+    plt.close()
+    #plt.show()
 #************************End of Functions**************************************************
 
 #************************Start Data Prep********************************************
@@ -65,23 +97,24 @@ fnn_backprop = buildNetwork(training_data.indim, 2, training_data.outdim, bias=T
 trainer = BackpropTrainer(fnn_backprop, dataset=training_data, momentum=0.1, verbose=True, weightdecay=0.01)
 
 epochs = 10
+epoch_v = []
 trnerr_backprop = []
 tsterr_backprop = []
 for i in xrange(epochs):
     # If you set the 'verbose' trainer flag, this will print the total error as it goes.
     trainer.trainEpochs(1)
 
-    output_train = trainer.testOnClassData()
-
-    for tr in output_train:
-        #print("This is the training output value: ", tr)
-        continue
-
     trnresult = percentError(trainer.testOnClassData(), training_data['class'])
     tstresult = percentError(trainer.testOnClassData(dataset=test_data), test_data['class'])
     print ("epoch: %4d" % trainer.totalepochs, " train error: %5.2f%%" % trnresult, " test error: %5.2f%%" % tstresult)
+    epoch_v.append(trainer.totalepochs)
     trnerr_backprop.append(trnresult)
     tsterr_backprop.append(tstresult)
+
+plot_learning_curve(epoch_v, trnerr_backprop, tsterr_backprop, "Neural Network With Backpropagation", "Epochs", "Error %", ylim=None)
+
+
+
 #*****************End of Backpropagation NN*******************************
 
 #*****************Start of RHC NN*******************************
